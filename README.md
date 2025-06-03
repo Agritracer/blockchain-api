@@ -36,7 +36,7 @@ output:
   "tx_hash": "0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73"
 }
 ```
-### Example Trace
+### Example Trace:
 curl:
 ```bash
 curl "http://localhost:8080/trace?tx=0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73"
@@ -48,7 +48,7 @@ output:
   "tx_hash": "0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73"
 }
 ```
-### Example Query
+### Example Query:
 curl:
 ```bash
 curl http://localhost:8080/query?id=sp001
