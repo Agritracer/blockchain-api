@@ -1,4 +1,52 @@
 # BlockChain API
+## Feature
+Dưới đây là danh sách các chức năng (API endpoints và logic liên quan) đã được xây dựng cho hệ thống truy xuất nguồn gốc nông sản sử dụng Blockchain Ethereum (Sepolia testnet):
+
+1. Submit dữ liệu truy xuất nguồn gốc (POST /submit)
+* Nhận một JSON gồm id, idEditor và data (thông tin sản phẩm).
+* Tính hash SHA256 của data.
+* Gửi thông tin gồm ID, ngày tạo và hash lên mạng Ethereum bằng giao dịch.
+* Lưu thông tin ID ↔ tx\_hash để phục vụ truy vấn.
+* Trả về SHA256 và tx\_hash của giao dịch.
+
+2. Truy xuất thông tin theo tx\_hash (GET /trace?tx=...)
+* Nhận tx\_hash từ client.
+* Gọi Etherscan API hoặc RPC để lấy nội dung giao dịch từ Ethereum.
+* Phân tích lại payload (data của transaction) và trả về thông tin ban đầu đã ghi.
+
+3. Truy vấn theo ID (GET /query?id=...)
+* Nhận ID sản phẩm từ client.
+* Truy tìm toàn bộ các tx\_hash có liên quan đến ID đó (các lần submit trước đó).
+* Trả về danh sách tx\_hash và số lần thay đổi dữ liệu.
+
+4. Danh sách tất cả giao dịch đã ghi (GET /list)
+* Liệt kê toàn bộ các tx\_hash và các ID tương ứng.
+* Dùng để kiểm tra toàn cục dữ liệu đã ghi lên blockchain.
+
+5. Cấu hình hệ thống:
+* Sử dụng file .env để cấu hình các biến như:
+  * ETHEREUM\_RPC
+  * PRIVATE\_KEY
+  * ETHERSCAN\_API\_KEY
+* Có module config nội bộ để load thông tin này từ file .env.
+
+6. Cấu trúc thư mục chuẩn:
+* internal/config: Load config từ .env
+* internal/model: Định nghĩa các struct dữ liệu như InputData, Response,...
+* internal/service: Logic xử lý dữ liệu (hash, gọi Ethereum, lưu tx,...)
+* internal/eth: Tương tác với Ethereum Sepolia (gửi tx, lấy tx,...)
+* internal/storage: Lưu mapping ID ↔ tx\_hash (có thể thay bằng Etherscan query hoặc Redis, BoltDB sau này)
+* cmd/server: Main HTTP server
+
+7. Tích hợp Etherscan API
+* Truy xuất nội dung giao dịch bằng tx\_hash từ Etherscan để tránh phụ thuộc RPC.
+* Chuẩn hóa truy vấn và xử lý nội dung trả về.
+
+8. Hỗ trợ xác thực 2FA giữa frontend và API server (ý tưởng đã lên, triển khai sau):
+* Chỉ cho phép truy vấn hoặc submit khi cả frontend và backend xác thực cùng một mã TOTP hợp lệ.
+
+
+## Example
 ### Example Data:
 ```Json
 {
