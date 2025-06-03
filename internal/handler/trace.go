@@ -7,6 +7,7 @@ import (
 	"agritrace-api/internal/eth"
 	"agritrace-api/internal/model"
 	"agritrace-api/internal/service"
+	"agritrace-api/internal/storage"
 )
 
 func HandleSubmit(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +27,8 @@ func HandleSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Lỗi xử lý: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	storage.AddTxHash(input.ID, resp.TxHash)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resp)

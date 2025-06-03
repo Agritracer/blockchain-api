@@ -5,16 +5,19 @@ import (
 	"fmt"
 	"math/big"
 
+	"agritrace-api/internal/config"
+
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-const rpcURL = "https://sepolia.infura.io/v3/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-const privateKeyHex = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-
 func SendToEthereum(data string) (string, error) {
+	config.LoadConfig()
+	rpcURL := config.Cfg.RPCUrl
+	privateKeyHex := config.Cfg.PrivateKey
+
 	client, err := ethclient.Dial(rpcURL)
 	if err != nil {
 		return "", err
@@ -40,6 +43,9 @@ func SendToEthereum(data string) (string, error) {
 }
 
 func GetDataFromTransaction(txHash string) (string, error) {
+	config.LoadConfig()
+	rpcURL := config.Cfg.RPCUrl
+
 	client, err := ethclient.Dial(rpcURL)
 	if err != nil {
 		return "", err
