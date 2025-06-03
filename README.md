@@ -31,7 +31,10 @@ curl -X POST http://localhost:8080/submit \
 ```
 output:
 ```json
-{"sha256":"9bf6d6bb85d68d0f39c2a4e23061f5c3155ca24cb8cb3179381e3b041b3ff83b","tx_hash":"0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73"}
+{
+  "sha256": "9bf6d6bb85d68d0f39c2a4e23061f5c3155ca24cb8cb3179381e3b041b3ff83b",
+  "tx_hash": "0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73"
+}
 ```
 ### Example Trace
 curl:
@@ -40,5 +43,8 @@ curl "http://localhost:8080/trace?tx=0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf
 ```
 output:
 ```json
-{"data":"ID: sp001\nDATE: 03/06/2025\nDATA: 9bf6d6bb85d68d0f39c2a4e23061f5c3155ca24cb8cb3179381e3b041b3ff83b","tx_hash":"0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73"}
+{
+  "data": "ID: sp001\nDATE: 03/06/2025\nDATA: 9bf6d6bb85d68d0f39c2a4e23061f5c3155ca24cb8cb3179381e3b041b3ff83b",
+  "tx_hash": "0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73"
+}
 ```
