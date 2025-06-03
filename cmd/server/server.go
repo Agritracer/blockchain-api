@@ -7,16 +7,16 @@ import (
 
 	"agritrace-api/internal/config"
 	"agritrace-api/internal/handler"
+	"agritrace-api/internal/middleware"
 	"agritrace-api/internal/utils"
 )
 
 func Start() {
 	config.LoadConfig()
 
-	http.HandleFunc("/submit", handler.HandleSubmit)
-	http.HandleFunc("/trace", handler.HandleTrace)
-	// http.HandleFunc("/query", handler.HandleQuery)
-	http.HandleFunc("/query", handler.HandleTraceByID)
+	http.Handle("/submit", middleware.Auth(http.HandlerFunc(handler.HandleSubmit)))
+	http.Handle("/trace", middleware.Auth(http.HandlerFunc(handler.HandleTrace)))
+	http.Handle("/query", middleware.Auth(http.HandlerFunc(handler.HandleTraceByID)))
 
 	port := config.Cfg.Port
 	if port == "" {

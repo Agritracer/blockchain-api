@@ -13,6 +13,8 @@ type Config struct {
 	EthscanAPI string
 	Wallet     string
 	Port       string
+	APIKey     string
+	TOTPSecret string
 }
 
 var Cfg Config
@@ -29,5 +31,7 @@ func LoadConfig() {
 		Port:       os.Getenv("PORT"),
 		EthscanAPI: os.Getenv("ETHERSCAN_API_KEY"),
 		Wallet:     os.Getenv("TRACE_WALLET_ADDRESS"),
+		APIKey:     os.Getenv("API_KEY"),
+		TOTPSecret: os.Getenv("TOTP_SECRET"),
 	}
 }

@@ -17,6 +17,8 @@ curl:
 ```bash
 curl -X POST http://localhost:8080/submit \
     -H "Content-Type: application/json" \
+    -H "X-API-Key: myfrontend" \
+    -H "X-TOTP-Code: 123456" \
     -d '{
             "id": "sp001",
             "data": {
@@ -39,7 +41,10 @@ output:
 ### Example Trace:
 curl:
 ```bash
-curl "http://localhost:8080/trace?tx=0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73"
+curl "http://localhost:8080/trace?tx=0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73" \
+    -H "Content-Type: application/json" \
+    -H "X-API-Key: myfrontend" \
+    -H "X-TOTP-Code: 123456" \
 ```
 output:
 ```json
@@ -51,7 +56,10 @@ output:
 ### Example Query:
 curl:
 ```bash
-curl http://localhost:8080/query?id=sp001
+curl http://localhost:8080/query?id=sp001 \
+    -H "Content-Type: application/json" \
+    -H "X-API-Key: myfrontend" \
+    -H "X-TOTP-Code: 123456" \
 ```
 output:
 ```json
