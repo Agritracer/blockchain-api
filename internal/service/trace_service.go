@@ -14,9 +14,11 @@ func ProcessTrace(input model.InputData) (*model.Response, error) {
 	jsonBytes, _ := json.Marshal(input.Data)
 	hash := sha256.Sum256(jsonBytes)
 	hashHex := hex.EncodeToString(hash[:])
+	inputID := input.ID
+	inputIDEditor := input.IDEditor
 
 	date := time.Now().Format("02/01/2006")
-	content := "ID: " + input.ID + "\nDATE: " + date + "\nDATA: " + hashHex
+	content := "ID: " + inputID + "\nIDEditor:" + inputIDEditor + "\nDATE: " + date + "\nDATA: " + hashHex
 
 	txHash, err := eth.SendToEthereum(content)
 	if err != nil {
@@ -24,7 +26,10 @@ func ProcessTrace(input model.InputData) (*model.Response, error) {
 	}
 
 	return &model.Response{
-		SHA256: hashHex,
-		TxHash: txHash,
+		ID:       inputID,
+		IDEditor: inputIDEditor,
+		Time:     date,
+		SHA256:   hashHex,
+		TxHash:   txHash,
 	}, nil
 }

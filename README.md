@@ -2,15 +2,17 @@
 ### Example Data:
 ```Json
 {
-    "id": "sp001",
-    "data": {
-      "name": "Cừu A",
-      "origin": "Viet Nam",
-      "certified": true,
-      "farmer": "Nguyễn văn B",
-      "weight_kg": 25
-    }
+  "id": "sp001",
+  "idEditor": "editor123",
+  "data": {
+    "name": "Sầu riêng Ri6",
+    "origin": "Đắk Lắk",
+    "certified": true,
+    "farmer": "Nguyễn Văn A",
+    "harvest_date": "2025-06-01",
+    "weight_kg": 2.5
   }
+}
 ```
 ### Example Submit:
 curl:
@@ -21,22 +23,25 @@ curl -X POST http://localhost:8080/submit \
     -H "X-API-Key: myfrontend" \
     -H "X-TOTP-Code: 123456" \
     -d '{
-            "id": "sp001",
-            "data": {
-              "name": "Sầu riêng Ri6",
-              "origin": "Đắk Lắk",
-              "certified": true,
-              "farmer": "Nguyễn Văn A",
-              "harvest_date": "2025-06-01",
-              "weight_kg": 2.5
-            }
+          "id": "sp001",
+          "idEditor": "editor123",
+          "data": {
+            "name": "Sầu riêng Ri6",
+            "origin": "Đắk Lắk",
+            "certified": true,
+            "farmer": "Nguyễn Văn A",
+            "weight_kg": 2.5
+          }
         }'
 ```
 output:
 ```json
 {
-  "sha256": "9bf6d6bb85d68d0f39c2a4e23061f5c3155ca24cb8cb3179381e3b041b3ff83b",
-  "tx_hash": "0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73"
+  "id": "sp001",
+  "idEditor": "editor123",
+  "time": "03/06/2025",
+  "sha256": "57459f66a1ad10050e79d9fad5bcb81e4268afcf863b7ad1fad67d3470df6ece",
+  "tx_hash": "0x5e80a3049438793da62e4a0adcddfcd987b688536b817fba7164624acf7f31b4"
 }
 ```
 ### Example Trace:
