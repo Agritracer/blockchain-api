@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"agritrace-api/internal/config"
 	"agritrace-api/internal/eth"
+	"agritrace-api/internal/ethscan"
 	"agritrace-api/internal/model"
 	"agritrace-api/internal/service"
 	"agritrace-api/internal/storage"
@@ -53,4 +55,38 @@ func HandleTrace(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resp)
+}
+
+func HandleTraceByID(w http.ResponseWriter, r *http.Request) {
+	config.LoadConfig()
+
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		http.Error(w, "Thiếu tham số ?id=", http.StatusBadRequest)
+		return
+	}
+
+	address := config.Cfg.Wallet
+	if address == "" {
+		http.Error(w, "TRACE_WALLET_ADDRESS chưa được cấu hình", http.StatusInternalServerError)
+		return
+	}
+
+	txs, err := ethscan.GetTransactionsByAddress(address, id)
+	if err != nil {
+		http.Error(w, "Lỗi truy vấn: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	hashes := make([]string, 0)
+	for _, tx := range txs {
+		hashes = append(hashes, tx.Hash)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"id":        id,
+		"tx_count":  len(hashes),
+		"tx_hashes": hashes,
+	})
 }

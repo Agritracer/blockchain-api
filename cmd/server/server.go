@@ -15,7 +15,8 @@ func Start() {
 
 	http.HandleFunc("/submit", handler.HandleSubmit)
 	http.HandleFunc("/trace", handler.HandleTrace)
-	http.HandleFunc("/query", handler.HandleQuery)
+	// http.HandleFunc("/query", handler.HandleQuery)
+	http.HandleFunc("/query", handler.HandleTraceByID)
 
 	port := config.Cfg.Port
 	if port == "" {

@@ -10,6 +10,8 @@ import (
 type Config struct {
 	RPCUrl     string
 	PrivateKey string
+	EthscanAPI string
+	Wallet     string
 	Port       string
 }
 
@@ -25,5 +27,7 @@ func LoadConfig() {
 		RPCUrl:     os.Getenv("RPC_URL"),
 		PrivateKey: os.Getenv("PRIVATE_KEY"),
 		Port:       os.Getenv("PORT"),
+		EthscanAPI: os.Getenv("ETHERSCAN_API_KEY"),
+		Wallet:     os.Getenv("TRACE_WALLET_ADDRESS"),
 	}
 }
