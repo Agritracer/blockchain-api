@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"agritrace-api/internal/config"
@@ -9,81 +8,74 @@ import (
 	"agritrace-api/internal/ethscan"
 	"agritrace-api/internal/model"
 	"agritrace-api/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
-func HandleSubmit(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Chỉ hỗ trợ POST", http.StatusMethodNotAllowed)
-		return
-	}
-
+func HandleSubmit(c *gin.Context) {
 	var input model.InputData
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		http.Error(w, "Lỗi JSON", http.StatusBadRequest)
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Lỗi JSON"})
 		return
 	}
 
 	resp, err := service.ProcessTrace(input)
 	if err != nil {
-		http.Error(w, "Lỗi xử lý: "+err.Error(), http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Lỗi xử lý: " + err.Error()})
 		return
 	}
 
 	// storage.AddTxHash(input.ID, resp.TxHash)
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	c.JSON(http.StatusOK, resp)
 }
 
-func HandleTrace(w http.ResponseWriter, r *http.Request) {
-	txHash := r.URL.Query().Get("tx")
+func HandleTrace(c *gin.Context) {
+	txHash := c.Query("tx")
 	if txHash == "" {
-		http.Error(w, "Thiếu ?tx=tx_hash", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Thiếu tham số ?tx=tx_hash"})
 		return
 	}
 
 	data, err := eth.GetDataFromTransaction(txHash)
 	if err != nil {
-		http.Error(w, "Không thể truy xuất giao dịch: "+err.Error(), http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Không thể truy xuất giao dịch: " + err.Error()})
 		return
 	}
 
-	resp := map[string]string{
+	c.JSON(http.StatusOK, gin.H{
 		"tx_hash": txHash,
 		"data":    data,
-	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	})
 }
 
-func HandleTraceByID(w http.ResponseWriter, r *http.Request) {
+func HandleTraceByID(c *gin.Context) {
 	config.LoadConfig()
 
-	id := r.URL.Query().Get("id")
+	id := c.Query("id")
 	if id == "" {
-		http.Error(w, "Thiếu tham số ?id=", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Thiếu tham số ?id="})
 		return
 	}
 
 	address := config.Cfg.Wallet
 	if address == "" {
-		http.Error(w, "TRACE_WALLET_ADDRESS chưa được cấu hình", http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "TRACE_WALLET_ADDRESS chưa được cấu hình"})
 		return
 	}
 
 	txs, err := ethscan.GetTransactionsByAddress(address, id)
 	if err != nil {
-		http.Error(w, "Lỗi truy vấn: "+err.Error(), http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Lỗi truy vấn: " + err.Error()})
 		return
 	}
 
-	hashes := make([]string, 0)
+	hashes := make([]string, 0, len(txs))
 	for _, tx := range txs {
 		hashes = append(hashes, tx.Hash)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	c.JSON(http.StatusOK, gin.H{
 		"id":        id,
 		"tx_count":  len(hashes),
 		"tx_hashes": hashes,

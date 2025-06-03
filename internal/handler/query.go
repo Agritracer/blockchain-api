@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"agritrace-api/internal/storage"
+
+	"github.com/gin-gonic/gin"
 )
 
 type QueryResponse struct {
@@ -12,16 +13,16 @@ type QueryResponse struct {
 	TxHashes []string `json:"tx_hashes"`
 }
 
-func HandleQuery(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
+func HandleQuery(c *gin.Context) {
+	id := c.Query("id")
 	if id == "" {
-		http.Error(w, "Thiếu tham số id", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Thiếu tham số id"})
 		return
 	}
 
 	txs := storage.GetTxHashes(id)
 	if len(txs) == 0 {
-		http.Error(w, "Không tìm thấy giao dịch nào cho ID này", http.StatusNotFound)
+		c.JSON(http.StatusNotFound, gin.H{"error": "Không tìm thấy giao dịch nào cho ID này"})
 		return
 	}
 
@@ -30,6 +31,5 @@ func HandleQuery(w http.ResponseWriter, r *http.Request) {
 		TxHashes: txs,
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	c.JSON(http.StatusOK, resp)
 }

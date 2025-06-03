@@ -61,3 +61,29 @@ func GetTransactionsByAddress(address string, targetID string) ([]model.Tx, erro
 
 	return matched, nil
 }
+
+func GetAllTxsByAddress(address string, apiKey string) ([]model.Tx, error) {
+	url := fmt.Sprintf(
+		"https://api.etherscan.io/api?module=account&action=txlist&address=%s&sort=desc&apikey=%s",
+		address, apiKey,
+	)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, _ := io.ReadAll(resp.Body)
+	var parsed model.EtherscanResponse
+	err = json.Unmarshal(body, &parsed)
+	if err != nil {
+		return nil, err
+	}
+
+	if parsed.Status != "1" {
+		return nil, fmt.Errorf("etherscan trả về lỗi: %s", parsed.Message)
+	}
+
+	return parsed.Result, nil
+}

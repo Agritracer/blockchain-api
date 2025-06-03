@@ -3,20 +3,27 @@ package server
 import (
 	"fmt"
 	"log"
-	"net/http"
 
 	"agritrace-api/internal/config"
 	"agritrace-api/internal/handler"
 	"agritrace-api/internal/middleware"
 	"agritrace-api/internal/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Start() {
 	config.LoadConfig()
 
-	http.Handle("/submit", middleware.Auth(http.HandlerFunc(handler.HandleSubmit)))
-	http.Handle("/trace", middleware.Auth(http.HandlerFunc(handler.HandleTrace)))
-	http.Handle("/query", middleware.Auth(http.HandlerFunc(handler.HandleTraceByID)))
+	router := gin.Default()
+	protected := router.Group("/", middleware.Auth())
+
+	{
+		protected.GET("/list", handler.HandleList)
+		protected.POST("/submit", handler.HandleSubmit)
+		protected.GET("/trace", handler.HandleTrace)
+		protected.GET("/query", handler.HandleTraceByID)
+	}
 
 	port := config.Cfg.Port
 	if port == "" {
@@ -24,5 +31,5 @@ func Start() {
 	}
 
 	fmt.Println("Server is running at http://" + utils.GetPublicIP() + ":" + port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(router.Run(":" + port))
 }
