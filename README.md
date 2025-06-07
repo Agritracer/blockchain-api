@@ -52,6 +52,7 @@ Dưới đây là danh sách các chức năng (API endpoints và logic liên qu
 {
   "id": "sp001",
   "idEditor": "editor123",
+  "status": "Active",
   "data": {
     "name": "Sầu riêng Ri6",
     "origin": "Đắk Lắk",
@@ -66,13 +67,13 @@ Dưới đây là danh sách các chức năng (API endpoints và logic liên qu
 curl:
 * [** POST **]
 ```bash
-curl -X POST http://localhost:8080/submit \
+curl -X POST http://localhost:8080/api/submit \
     -H "Content-Type: application/json" \
     -H "X-API-Key: myfrontend" \
-    -H "X-TOTP-Code: 123456" \
     -d '{
           "id": "sp001",
           "idEditor": "editor123",
+          "status": "Active",
           "data": {
             "name": "Sầu riêng Ri6",
             "origin": "Đắk Lắk",
@@ -96,10 +97,9 @@ output:
 curl:
 * [** GET **]
 ```bash
-curl "http://localhost:8080/trace?tx=0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73" \
+curl "http://localhost:8080/api/trace?tx=0xfdbfd99963aa9d2d05584ed5712090f95124b6ddf3b0740315f98baa4162fc73" \
     -H "Content-Type: application/json" \
-    -H "X-API-Key: myfrontend" \
-    -H "X-TOTP-Code: 123456"
+    -H "X-API-Key: myfrontend"
 ```
 output:
 ```json
@@ -112,10 +112,9 @@ output:
 curl:
 * [** GET **]
 ```bash
-curl http://localhost:8080/query?id=sp001 \
+curl http://localhost:8080/api/query?id=sp001 \
     -H "Content-Type: application/json" \
-    -H "X-API-Key: myfrontend" \
-    -H "X-TOTP-Code: 123456"
+    -H "X-API-Key: myfrontend"
 ```
 output:
 ```json
@@ -136,8 +135,7 @@ curl:
 ```bash
 curl http://localhost:8080/list \
     -H "Content-Type: application/json" \
-    -H "X-API-Key: myfrontend" \
-    -H "X-TOTP-Code: 123456"
+    -H "X-API-Key: myfrontend"
 ```
 output:
 ```json
