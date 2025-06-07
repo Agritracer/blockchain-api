@@ -16,7 +16,7 @@ func Start() {
 	config.LoadConfig()
 
 	router := gin.Default()
-	protected := router.Group("/", middleware.Auth())
+	protected := router.Group("/api/", middleware.Auth())
 
 	{
 		protected.GET("/list", handler.HandleList)
