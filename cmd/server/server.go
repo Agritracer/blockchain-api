@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"log"
 
 	"agritrace-api/internal/config"
 	"agritrace-api/internal/handler"
@@ -12,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Start() {
+func Start() error {
 	config.LoadConfig()
 
 	router := gin.Default()
@@ -32,5 +31,5 @@ func Start() {
 	}
 
 	fmt.Println("Server is running at http://" + utils.GetPublicIP() + ":" + port)
-	log.Fatal(router.Run(":" + port))
+	return router.Run(":" + port)
 }
