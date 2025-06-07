@@ -86,8 +86,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "Đăng nhập thành công",
 	})
-
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func LoginFormHandler(w http.ResponseWriter, r *http.Request) {
