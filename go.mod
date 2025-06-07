@@ -1,4 +1,4 @@
-module agritrace-api
+module agritrace
 
 go 1.23.0
 
