@@ -3,12 +3,18 @@ package middleware
 import (
 	"net/http"
 
+	"agritrace/internal/config"
+
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtKey = []byte("supersecretkey123")
+var jwtKey []byte
 
 func JWTAuthRedirect(next http.Handler) http.Handler {
+	config.LoadConfig()
+
+	jwtKey = []byte(config.Cfg.JWTToken)
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("token")
 		if err != nil {

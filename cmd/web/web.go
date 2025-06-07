@@ -13,8 +13,9 @@ import (
 func Start() error {
 	config.LoadConfig()
 
-	mux := http.NewServeMux()
+	fs := http.FileServer(http.Dir("static"))
 
+	mux := http.NewServeMux()
 	mux.Handle("/login", middleware.RedirectIfLoggedIn(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			controller.LoginFormHandler(w, r)
@@ -24,10 +25,9 @@ func Start() error {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
 	})))
-
 	mux.Handle("/", middleware.JWTAuthRedirect(http.HandlerFunc(controller.HomeHandler)))
-
 	mux.Handle("/logout", middleware.JWTAuthRedirect(http.HandlerFunc(controller.LogoutHandler)))
+	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	port := config.Cfg.WebPort
 	if port == "" {
