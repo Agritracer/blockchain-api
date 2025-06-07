@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"strings"
 
-	"agritrace-api/internal/config"
-	"agritrace-api/internal/model"
+	"agritrace/internal/config"
+	"agritrace/internal/model"
 )
 
 func GetTransactionsByAddress(address string, targetID string) ([]model.Tx, error) {

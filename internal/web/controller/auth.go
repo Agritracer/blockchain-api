@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"agritrace-api/internal/config"
+	"agritrace/internal/config"
 	"encoding/json"
 	"net/http"
 	"path/filepath"

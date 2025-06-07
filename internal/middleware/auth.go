@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"agritrace-api/internal/config"
+	"agritrace/internal/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

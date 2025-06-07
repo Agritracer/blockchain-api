@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"agritrace-api/internal/config"
-	"agritrace-api/internal/utils"
-	"agritrace-api/internal/web/controller"
-	"agritrace-api/internal/web/middleware"
+	"agritrace/internal/config"
+	"agritrace/internal/utils"
+	"agritrace/internal/web/controller"
+	"agritrace/internal/web/middleware"
 )
 
 func Start() error {

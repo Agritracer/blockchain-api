@@ -3,8 +3,8 @@ package handler
 import (
 	"net/http"
 
-	"agritrace-api/internal/config"
-	"agritrace-api/internal/ethscan"
+	"agritrace/internal/config"
+	"agritrace/internal/ethscan"
 
 	"github.com/gin-gonic/gin"
 )

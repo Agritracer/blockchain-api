@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"agritrace-api/internal/storage"
+	"agritrace/internal/storage"
 
 	"github.com/gin-gonic/gin"
 )

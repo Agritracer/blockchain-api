@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"agritrace-api/internal/config"
+	"agritrace/internal/config"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"

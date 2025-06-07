@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"agritrace-api/internal/eth"
-	"agritrace-api/internal/model"
+	"agritrace/internal/eth"
+	"agritrace/internal/model"
 )
 
 func ProcessTrace(input model.InputData) (*model.Response, error) {

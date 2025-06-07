@@ -3,10 +3,10 @@ package server
 import (
 	"fmt"
 
-	"agritrace-api/internal/config"
-	"agritrace-api/internal/handler"
-	"agritrace-api/internal/middleware"
-	"agritrace-api/internal/utils"
+	"agritrace/internal/config"
+	"agritrace/internal/handler"
+	"agritrace/internal/middleware"
+	"agritrace/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
