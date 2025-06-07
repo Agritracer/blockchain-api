@@ -25,7 +25,7 @@ func Start() error {
 		// protected.GET("/compare", hanlder.HandlerCompare)
 	}
 
-	port := config.Cfg.Port
+	port := config.Cfg.ApiPort
 	if port == "" {
 		port = "8080"
 	}

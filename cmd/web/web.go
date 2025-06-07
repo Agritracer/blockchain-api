@@ -4,12 +4,36 @@ import (
 	"log"
 	"net/http"
 
+	"agritrace-api/internal/config"
+	"agritrace-api/internal/utils"
 	"agritrace-api/internal/web/controller"
+	"agritrace-api/internal/web/middleware"
 )
 
 func Start() error {
-	http.HandleFunc("/", controller.HomeHandler)
+	config.LoadConfig()
 
-	log.Println("🌐 Web server running at http://localhost:8080")
-	return http.ListenAndServe(":8081", nil)
+	mux := http.NewServeMux()
+
+	mux.Handle("/login", middleware.RedirectIfLoggedIn(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			controller.LoginFormHandler(w, r)
+		} else if r.Method == http.MethodPost {
+			controller.LoginHandler(w, r)
+		} else {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	})))
+
+	mux.Handle("/", middleware.JWTAuthRedirect(http.HandlerFunc(controller.HomeHandler)))
+
+	mux.Handle("/logout", middleware.JWTAuthRedirect(http.HandlerFunc(controller.LogoutHandler)))
+
+	port := config.Cfg.WebPort
+	if port == "" {
+		port = "8081"
+	}
+
+	log.Println(utils.GetPublicIP() + ":" + port)
+	return http.ListenAndServe(":"+port, mux)
 }
