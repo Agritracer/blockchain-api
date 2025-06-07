@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pquerna/otp/totp"
+	_ "github.com/pquerna/otp/totp"
 )
 
 func Auth() gin.HandlerFunc {
@@ -13,7 +13,7 @@ func Auth() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		apiKey := c.GetHeader("X-API-Key")
-		totpCode := c.GetHeader("X-TOTP-Code")
+		// totpCode := c.GetHeader("X-TOTP-Code")
 
 		// Kiểm tra API key
 		if apiKey != config.Cfg.APIKey {
@@ -23,11 +23,11 @@ func Auth() gin.HandlerFunc {
 		}
 
 		// Kiểm tra mã TOTP
-		if !totp.Validate(totpCode, config.Cfg.TOTPSecret) {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: Invalid TOTP Code"})
-			c.Abort()
-			return
-		}
+		// if !totp.Validate(totpCode, config.Cfg.TOTPSecret) {
+		// c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: Invalid TOTP Code"})
+		// c.Abort()
+		// return
+		// }
 
 		// Nếu hợp lệ, tiếp tục xử lý request
 		c.Next()

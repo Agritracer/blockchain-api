@@ -23,6 +23,7 @@ func Start() {
 		protected.POST("/submit", handler.HandleSubmit)
 		protected.GET("/trace", handler.HandleTrace)
 		protected.GET("/query", handler.HandleTraceByID)
+		// protected.GET("/compare", hanlder.HandlerCompare)
 	}
 
 	port := config.Cfg.Port
