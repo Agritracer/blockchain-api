@@ -26,7 +26,7 @@ type Claims struct {
 }
 
 var users = map[string]string{
-	"admin": "$2y$10$kL4rzwXNkk5NO2EicLOAcemAxKVTTNV4qLpNd.UGuOjwX/Hm/fsg2", // 123456
+	"admin@gmail.com": "$2y$10$kL4rzwXNkk5NO2EicLOAcemAxKVTTNV4qLpNd.UGuOjwX/Hm/fsg2", // 123456
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {

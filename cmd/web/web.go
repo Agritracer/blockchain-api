@@ -13,7 +13,7 @@ import (
 func Start() error {
 	config.LoadConfig()
 
-	fs := http.FileServer(http.Dir("static"))
+	fs := http.FileServer(http.Dir("internal/web/static"))
 
 	mux := http.NewServeMux()
 	mux.Handle("/login", middleware.RedirectIfLoggedIn(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
