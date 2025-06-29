@@ -87,3 +87,47 @@ func GetAllTxsByAddress(address string, apiKey string) ([]model.Tx, error) {
 
 	return parsed.Result, nil
 }
+
+func GetTxInput(txHash string) (string, error) {
+	config.LoadConfig()
+	apiKey := config.Cfg.EthscanAPI
+	if apiKey == "" {
+		return "", fmt.Errorf("ETHERSCAN_API_KEY chưa được thiết lập")
+	}
+
+	url := fmt.Sprintf(
+		"https://api-sepolia.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=%s&apikey=%s",
+		txHash,
+		apiKey,
+	)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", fmt.Errorf("lỗi truy vấn Etherscan: %v", err)
+	}
+	defer resp.Body.Close()
+
+	body, _ := io.ReadAll(resp.Body)
+
+	var parsed map[string]interface{}
+	if err := json.Unmarshal(body, &parsed); err != nil {
+		return "", fmt.Errorf("lỗi phân tích JSON: %v", err)
+	}
+
+	result, ok := parsed["result"].(map[string]interface{})
+	if !ok {
+		return "", fmt.Errorf("không tìm thấy trường 'result' trong phản hồi")
+	}
+
+	inputHex, ok := result["input"].(string)
+	if !ok {
+		return "", fmt.Errorf("không tìm thấy trường 'input' trong kết quả giao dịch")
+	}
+
+	// Decode the hex string to bytes
+	dataBytes, err := hex.DecodeString(strings.TrimPrefix(inputHex, "0x"))
+	if err != nil {
+		return "", fmt.Errorf("lỗi giải mã dữ liệu đầu vào hex: %v", err)
+	}
+	return string(dataBytes), nil
+}

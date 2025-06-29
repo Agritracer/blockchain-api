@@ -75,9 +75,23 @@ func HandleTraceByID(c *gin.Context) {
 		hashes = append(hashes, tx.Hash)
 	}
 
+	shacodes := make([]string, 0, len(txs))
+	for range txs {
+		i := 0
+		shacode, err := ethscan.GetTxInput(hashes[i])
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Lỗi truy vấn: " + err.Error()})
+			return
+		}
+		shacodes = append(shacodes, shacode)
+
+		i++
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"id":        id,
 		"tx_count":  len(hashes),
 		"tx_hashes": hashes,
+		"sha256":    shacodes,
 	})
 }

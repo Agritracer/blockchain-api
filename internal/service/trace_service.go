@@ -12,8 +12,10 @@ import (
 
 func ProcessTrace(input model.InputData) (*model.Response, error) {
 	jsonBytes, _ := json.Marshal(input.Data)
+	// fmt.Println(string(jsonBytes))
 	hash := sha256.Sum256(jsonBytes)
 	hashHex := hex.EncodeToString(hash[:])
+	// fmt.Println(hashHex)
 	inputID := input.ID
 	statusIF := input.Status
 	inputIDEditor := input.IDEditor
